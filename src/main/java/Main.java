@@ -12,5 +12,8 @@ public class Main {
         Model appModel = Model.getInstance();
         SQLiteJDBC sqLiteJDBC = new SQLiteJDBC();
         DocParser docParser = new DocParser( appModel.storageRef+"/autumn.txt");
+        docParser = new DocParser( appModel.storageRef+"/my doves.txt");
+        //testing
+        IndexedWord x =  appModel.indexedWords.get("and");
     }
 }

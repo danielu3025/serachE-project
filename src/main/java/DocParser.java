@@ -42,6 +42,7 @@ public class DocParser {
         txt =  txt.replaceAll(Pattern.quote("."),"~");
         txt =  txt.replaceAll(",","~");
         txt =  txt.replaceAll(";","~");
+        txt =  txt.replaceAll(":","~");
         txt =  txt.replaceAll("\"","~");
         txt =  txt.replaceAll(Pattern.quote("?"),"~");
         txt =  txt.replaceAll(Pattern.quote("!"),"~");
