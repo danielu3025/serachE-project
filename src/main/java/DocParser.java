@@ -1,9 +1,6 @@
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class DocParser {
@@ -45,6 +42,13 @@ public class DocParser {
         txt =  txt.replaceAll(":","~");
         txt =  txt.replaceAll("\"","~");
         txt =  txt.replaceAll(Pattern.quote("?"),"~");
+        txt =  txt.replaceAll(Pattern.quote(")"),"~");
+        txt =  txt.replaceAll(Pattern.quote("("),"~");
+        txt =  txt.replaceAll(Pattern.quote("{"),"~");
+        txt =  txt.replaceAll(Pattern.quote("}"),"~");
+        txt =  txt.replaceAll(Pattern.quote("="),"~");
+        txt =  txt.replaceAll(Pattern.quote("+"),"~");
+        txt =  txt.replaceAll(Pattern.quote("-"),"~");
         txt =  txt.replaceAll(Pattern.quote("!"),"~");
         txt =  txt.replaceAll(Pattern.quote("~~~"),"~");
         txt =  txt.replaceAll(Pattern.quote("~~"),"~");
@@ -56,10 +60,19 @@ public class DocParser {
             arr = row.split("~",-1);
             for (String word: arr) {
                if (appModel.indexedWords.containsKey(word)){
-                   appModel.indexedWords.get(word).updateLocations(fileName,lines.indexOf(row));
+                   if (appModel.indexedWords.get(word).containsKey(fileName)){
+                       int freq  = appModel.indexedWords.get(word).get(fileName);
+                       appModel.indexedWords.get(word).put(fileName,freq +1);
+                   }
+                   else {
+                        appModel.indexedWords.get(word).put(fileName,1);
+                   }
                }
+
                else {
-                   appModel.indexedWords.put(word,new IndexedWord(word,lines.indexOf(row),fileName));
+                    Map<String,Integer> obj = new HashMap<>();
+                    obj.put(fileName,1);
+                    appModel.indexedWords.put(word,obj);
                }
             }
         }

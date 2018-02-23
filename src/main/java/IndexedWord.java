@@ -1,28 +1,14 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Objects;
 
 public class IndexedWord {
-    String word;
-    class Location{
-        String fileName;
-        int line ;
-
-        public Location(String fileName, int line) {
-            this.fileName = fileName;
-            this.line = line;
-        }
+    HashMap<String,Integer> frequency = new HashMap<>();
+    public IndexedWord(String name) {
+        frequency.put(name,1);
     }
-    ArrayList<Location> wordLoctions = new ArrayList<>();
-
-    public IndexedWord(String word,int line , String file) {
-        this.word = word;
-        wordLoctions.add(new Location(file,line));
-    }
-
-    public void updateLocations(String txt , int num){
-        Location location = new Location(txt,num);
-        if (!wordLoctions.contains(location)){
-            wordLoctions.add(location);
-        }
+    public void updateOccerncey(String name){
+        frequency.put(name,frequency.get(name)+1);
     }
 
 }
