@@ -1,18 +1,29 @@
+package main;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 import java.util.regex.Pattern;
 
+import datamodel.Model;
+
 public class DocParser {
-    Model appModel = Model.getInstance();
-    List<String> lines = new ArrayList<String>();
-    String fileName = "";
+    private Model appModel = Model.getInstance();
+    private List<String> lines = new ArrayList<String>();
+    private String fileName = "";
+
     public DocParser(String filename) {
+        this.fileName= filename;
+    }
+
+    public void parse() {
         Scanner scanner = null;
-        fileName = filename;
         String line = "";
         try {
-            scanner = new Scanner(new FileReader(filename));
+            scanner = new Scanner(new FileReader(fileName));
             while (scanner.hasNextLine()){
                 line = scanner.nextLine().toLowerCase();
                 if (!line.equals("")){
@@ -31,7 +42,8 @@ public class DocParser {
             }
         }
     }
-    public String parseLine(String txt){
+
+    private String parseLine(String txt){
         txt =  txt.replaceAll(" ","~");
         txt =  txt.replaceAll("-","~");
         txt =  txt.replaceAll("_","~");
@@ -54,30 +66,27 @@ public class DocParser {
         txt =  txt.replaceAll(Pattern.quote("~~"),"~");
         return  txt;
     }
-    public void indexTheDoc(){
-        String arr[];
-        for (String row:lines) {
-            arr = row.split("~",-1);
-            for (String word: arr) {
-               if (appModel.indexedWords.containsKey(word)){
-                   if (appModel.indexedWords.get(word).containsKey(fileName)){
-                       int freq  = appModel.indexedWords.get(word).get(fileName);
-                       appModel.indexedWords.get(word).put(fileName,freq +1);
-                   }
-                   else {
-                        appModel.indexedWords.get(word).put(fileName,1);
-                   }
-               }
 
-               else {
-                    Map<String,Integer> obj = new HashMap<>();
-                    obj.put(fileName,1);
-                    appModel.indexedWords.put(word,obj);
-               }
+    private void indexTheDoc(){
+        String lineWords[];
+        for (String row:lines) {
+            lineWords = row.split("~",-1);
+            for (String word: lineWords) {
+                Map<String, Integer> wordIndexMap = appModel.indexedWords.get(word);
+                if (wordIndexMap != null) {
+                    Integer wordInFileNumber = wordIndexMap.get(fileName);
+                    if (wordInFileNumber != null){
+                        wordIndexMap.put(fileName, wordInFileNumber +1);
+                    }
+                    else {
+                        wordIndexMap.put(fileName, 1);
+                    }
+                } else {
+                    wordIndexMap = new HashMap<>();
+                    wordIndexMap.put(fileName,1);
+                    appModel.indexedWords.put(word, wordIndexMap);
+                }
             }
         }
     }
-
-
-
 }
