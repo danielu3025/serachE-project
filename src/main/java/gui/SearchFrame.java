@@ -2,8 +2,11 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+
+import static javax.swing.JOptionPane.showMessageDialog;
 
 public class SearchFrame extends JFrame{
     JTextField searchBar = new JTextField();
@@ -11,7 +14,9 @@ public class SearchFrame extends JFrame{
     JButton searchBT  = new JButton(new ImageIcon("src/main/resources/imges/searchBT.png"));
     JButton adminBt  = new JButton(new ImageIcon("src/main/resources/imges/adminBt.png"));
     Font font ;
-    JList<String> resultList;
+    JList<ResultItem> resultList;
+    DefaultListModel<ResultItem> listModel = new DefaultListModel<>();
+
 
 
     public SearchFrame() throws HeadlessException {
@@ -53,6 +58,7 @@ public class SearchFrame extends JFrame{
 
     }
     private void resulteLayout(){
+
         font = new Font("SansSerif", Font.PLAIN, 20);
         searchBar.setFont(font);
         logoBt.setIcon(new ImageIcon("src/main/resources/imges/danielSmall.png"));
@@ -68,55 +74,101 @@ public class SearchFrame extends JFrame{
         searchBT.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("im Cliked");
-                resulteLayout();
+                search();
+            }
+        });
+
+        adminBt.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Open Admin window");
+                //call admin program here
+            }
+        });
+
+        searchBar.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER){
+                    search();
+                }
             }
         });
     }
-
     private void results(){
-        DefaultListModel<String> listModel = new DefaultListModel<>();
-        listModel.addElement("doc1");
-        listModel.addElement("doc2");
-        listModel.addElement("doc3");
-        listModel.addElement("doc4");
-        listModel.addElement("doc5");
-        listModel.addElement("doc5");
-        listModel.addElement("doc6");
-        listModel.addElement("doc7");
-        listModel.addElement("doc1");
-        listModel.addElement("doc2");
-        listModel.addElement("doc3");
-        listModel.addElement("doc4");
-        listModel.addElement("doc5");
-        listModel.addElement("doc5");
-        listModel.addElement("doc6");
-        listModel.addElement("doc7");
-        listModel.addElement("doc1");
-        listModel.addElement("doc2");
-        listModel.addElement("doc3");
-        listModel.addElement("doc4");
-        listModel.addElement("doc5");
-        listModel.addElement("doc5");
-        listModel.addElement("doc6");
-        listModel.addElement("doc7");
-        listModel.addElement("doc1");
-        listModel.addElement("doc2");
-        listModel.addElement("doc3");
-        listModel.addElement("doc4");
-        listModel.addElement("doc5");
-        listModel.addElement("doc5");
-        listModel.addElement("doc6");
-        listModel.addElement("doc7");
+
+        for (int i = 0 ; i < 30 ; i ++ ){
+            listModel.addElement(new ResultItem("AUTUMN","src/main/resources/storage/AUTUMN.txt","NOW droops the troubled year\n" + "And now her tiny sunset stains the leaf.\n" + "A holy fear,\n"));
+        }
+
 
         //create the list
-        resultList = new JList<>(listModel);
-        resultList.setFont(new Font("SansSerif", Font.PLAIN, 40));
-        resultList.setBounds(20,100,1227,685);
-        resultList.setAutoscrolls(true);
+        resultList = new JList<ResultItem>(listModel);
+        resultList.setCellRenderer(new ResultItemRanderer());
 
-        add(resultList);
+
+        MouseListener mouseListener = new MouseAdapter() {
+            public void mouseClicked(MouseEvent mouseEvent) {
+                JList theList = (JList) mouseEvent.getSource();
+                if (mouseEvent.getClickCount() == 2) {
+                    int index = theList.locationToIndex(mouseEvent.getPoint());
+                    if (index >= 0) {
+                        ResultItem o = (ResultItem) theList.getModel().getElementAt(index);
+                        System.out.println("open file : " + o.getFilePath());
+                        openFile(o.filePath);
+                    }
+                }
+            }
+        };
+
+        resultList.addMouseListener(mouseListener);
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setViewportView(resultList);
+        scrollPane.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
+            @Override
+            public void adjustmentValueChanged(AdjustmentEvent ae) {
+                int extent = scrollPane.getVerticalScrollBar().getModel().getExtent();
+
+                if (scrollPane.getVerticalScrollBar().getValue()+ extent >= scrollPane.getVerticalScrollBar().getMaximum()/2 ){
+                    System.out.println("reach the half wat brig more results");
+                    addRes();
+                }
+            }
+        });
+
+        scrollPane.setBounds(20,100,1240,685);
+        add(scrollPane);
 
     }
+    public void openFile(String path){
+        File file = new File(path);
+        try {
+            if (!file.exists()){
+                ErrorMsgBox.infoBox("file not found!","Error");
+            }
+            else {
+                Desktop.getDesktop().open(file);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void search(){
+        if (!searchBar.getText().isEmpty()){
+            //call query hear
+            System.out.println("Search");
+            resulteLayout();
+        }
+    }
+
+
+    private void addRes(){
+        // bring more results
+    }
+
+
+
+
 
 }
