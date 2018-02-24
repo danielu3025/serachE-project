@@ -14,8 +14,8 @@ public class SearchFrame extends JFrame{
     JButton searchBT  = new JButton(new ImageIcon("src/main/resources/imges/searchBT.png"));
     JButton adminBt  = new JButton(new ImageIcon("src/main/resources/imges/adminBt.png"));
     Font font ;
-    JList<ResultItem> resultList;
     DefaultListModel<ResultItem> listModel = new DefaultListModel<>();
+    JList<ResultItem> resultList;
 
 
 
@@ -24,7 +24,6 @@ public class SearchFrame extends JFrame{
         clickListenrs();
 
     }
-
     private void frameCreator(){
         setLayout(new FlowLayout());
         setResizable(false);
@@ -35,6 +34,7 @@ public class SearchFrame extends JFrame{
         setLocationRelativeTo(null);
         setVisible(true);
     }
+    //this function set the first Screen
     private void initLayout(){
         searchBar.setBounds(183,376,819,99);
         font = new Font("SansSerif", Font.PLAIN, 40);
@@ -57,6 +57,7 @@ public class SearchFrame extends JFrame{
         frameCreator();
 
     }
+    //this function set the result screen
     private void resulteLayout(){
 
         font = new Font("SansSerif", Font.PLAIN, 20);
@@ -69,7 +70,7 @@ public class SearchFrame extends JFrame{
 
         results();
     }
-
+    //this functions set the button listeners
     private void clickListenrs(){
         searchBT.addActionListener(new ActionListener() {
             @Override
@@ -95,18 +96,20 @@ public class SearchFrame extends JFrame{
             }
         });
     }
+    //this function is for showing the results
     private void results(){
 
+        //insert the real results from query here
         for (int i = 0 ; i < 30 ; i ++ ){
             listModel.addElement(new ResultItem("AUTUMN","src/main/resources/storage/AUTUMN.txt","NOW droops the troubled year\n" + "And now her tiny sunset stains the leaf.\n" + "A holy fear,\n"));
         }
 
-
         //create the list
         resultList = new JList<ResultItem>(listModel);
+
         resultList.setCellRenderer(new ResultItemRanderer());
 
-
+        // dabble click to open file listenr
         MouseListener mouseListener = new MouseAdapter() {
             public void mouseClicked(MouseEvent mouseEvent) {
                 JList theList = (JList) mouseEvent.getSource();
@@ -140,6 +143,7 @@ public class SearchFrame extends JFrame{
         add(scrollPane);
 
     }
+    //this function open file if it its path is exists with default program
     public void openFile(String path){
         File file = new File(path);
         try {
@@ -153,7 +157,7 @@ public class SearchFrame extends JFrame{
             e.printStackTrace();
         }
     }
-
+    //this function should activate the query and when its done show the result layout
     private void search(){
         if (!searchBar.getText().isEmpty()){
             //call query hear
@@ -161,14 +165,8 @@ public class SearchFrame extends JFrame{
             resulteLayout();
         }
     }
-
-
+    //this function need to fetch more data if needed
     private void addRes(){
         // bring more results
     }
-
-
-
-
-
 }

@@ -1,6 +1,8 @@
 package gui;
 import javax.swing.JOptionPane;
-
+/**
+ this class is responsible to create  a pop window with a message
+ **/
 
 public class ErrorMsgBox {
 

@@ -1,5 +1,9 @@
 package gui;
 
+/**
+ this Pojo repress a document
+ **/
+
 public class ResultItem {
     String title;
     String filePath;

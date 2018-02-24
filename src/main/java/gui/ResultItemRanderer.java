@@ -4,7 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-
+/**
+ this class is responsible to create the result item row in the result layout
+ **/
 public class ResultItemRanderer  extends JPanel implements ListCellRenderer<ResultItem> {
 
     private JLabel lbTitle = new JLabel();
