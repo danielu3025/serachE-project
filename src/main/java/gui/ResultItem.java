@@ -42,6 +42,6 @@ public class ResultItem {
 
     @Override
     public String toString() {
-        return title +"-"+description;
+        return filePath;
     }
 }

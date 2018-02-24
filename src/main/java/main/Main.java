@@ -3,6 +3,8 @@ import java.io.File;
 
 import datamodel.Model;
 import db.SQLiteJDBC;
+import gui.AdminFrame;
+import gui.AdminInsertFrame;
 import gui.SearchFrame;
 
 import javax.swing.*;
@@ -35,7 +37,8 @@ public class Main {
         //        frame.setVisible(true);
         //    }
 
-        SearchFrame searchFrame = new SearchFrame();
+        //SearchFrame searchFrame = new SearchFrame();
+        AdminInsertFrame adminFrame = new AdminInsertFrame();
 
 
     }
