@@ -52,6 +52,7 @@ public class AdminManegeDocsFrame extends JFrame{
                 }
             }
         });
+
         checkBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
