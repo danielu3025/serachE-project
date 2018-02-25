@@ -5,12 +5,14 @@ import java.util.Map;
 
 public class Model {
     private final File storageFolder;
+    private final File tempFolder;
     public Map<String, Map<String,Integer>> indexedWords;
     
     private static Model ourInstance;
 
     private Model() {
         storageFolder = new File("src/main/resources/storage");
+        tempFolder = new File("src/main/resources/temp");
         indexedWords = new HashMap<>();
     }
     
@@ -24,5 +26,9 @@ public class Model {
     
     public File[] getListFiles() {
         return storageFolder.listFiles();
+    }
+
+    public File getTempFolder() {
+        return tempFolder;
     }
 }

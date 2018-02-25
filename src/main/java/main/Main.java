@@ -5,6 +5,7 @@ import datamodel.Model;
 import db.SQLiteJDBC;
 import gui.AdminFrame;
 import gui.AdminInsertFrame;
+import gui.AdminManegeDocsFrame;
 import gui.SearchFrame;
 
 import javax.swing.*;
@@ -25,10 +26,7 @@ public class Main {
         }
         
         // save the index in DB
-       // SQLiteJDBC sqLiteJDBC = new SQLiteJDBC();
-
-
-
+        // SQLiteJDBC sqLiteJDBC = new SQLiteJDBC();
         //    public static void openMainWindow(){
         //        JFrame frame = new JFrame("D A N I E L");
         //        frame.setContentPane(new App().mainPanel);
@@ -36,9 +34,7 @@ public class Main {
         //        frame.pack();
         //        frame.setVisible(true);
         //    }
-
-        //SearchFrame searchFrame = new SearchFrame();
-        AdminInsertFrame adminFrame = new AdminInsertFrame();
+        SearchFrame searchFrame = new SearchFrame();
 
 
     }

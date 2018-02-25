@@ -1,11 +1,13 @@
 package gui;
 
+import datamodel.Model;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class AdminInsertFrame extends JFrame {
@@ -42,7 +44,6 @@ public class AdminInsertFrame extends JFrame {
         setLayout(null);
         setSize(1280,850);
         setTitle("ADMIN");
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
     }
@@ -66,16 +67,12 @@ public class AdminInsertFrame extends JFrame {
         submitBt.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                //run the parser and load to DB
             }
         });
     }
 
     private void results(){
-
-        for (int i = 0 ; i < 5 ; i ++ ){
-            listModel.addElement(new DocFile("src/main/resources/storage/AUTUMN.txt",true));
-        }
         //create the list
         doccList  = new JList<DocFile>(listModel);
         doccList.setCellRenderer(new DocRenderer());
@@ -88,10 +85,17 @@ public class AdminInsertFrame extends JFrame {
                     if (index >= 0) {
                         DocFile o = (DocFile) theList.getModel().getElementAt(index);
                         System.out.println("remove: " + o.getPath());
-                        listModel.remove(index);
+                        try {
+
+                            File f = new File(Model.getInstance().getTempFolder()
+                                    .getAbsolutePath()+"/"+new File(o.path).getName());
+                            f.delete();
+                            listModel.remove(index);
+                        }catch (Exception e){
+                            ErrorMsgBox.infoBox("Error","");
+                        }
                     }
                 }
-
             }
 
         };
@@ -104,20 +108,48 @@ public class AdminInsertFrame extends JFrame {
 
     }
     private  void loadFilesFromExplorer(){
-        String contentType="";
         FileDialog fd = new FileDialog(new JFrame());
         fd.setVisible(true);
         fd.setMultipleMode(true);
         File[] f = fd.getFiles();
         for (File doc :f){
-            listModel.addElement(new DocFile(doc.getAbsolutePath(),true));
+            try{
+                copyFileUsingFileStreams(doc,new File(Model.getInstance().getTempFolder().getAbsolutePath()+"/"+doc.getName()));
+                listModel.addElement(new DocFile(doc.getAbsolutePath(),true));
+            }
+            catch (Exception e){
+                ErrorMsgBox.infoBox("error","");
+            }
         }
     }
     private void loadSingleFile(String path){
+
         File file = new File(path);
         if (file.exists()){
+            try{
+                copyFileUsingFileStreams(file,new File(Model.getInstance().getTempFolder().getAbsolutePath()+"/"+file.getName()));
+            }catch (Exception e){
+                e.getMessage();
+                ErrorMsgBox.infoBox("file dosent exists","Error");
+            }
             listModel.addElement(new DocFile(file.getAbsolutePath(),true));
         }
         else ErrorMsgBox.infoBox("file dosent exists","Error");
+    }
+    private static void copyFileUsingFileStreams(File source, File dest) throws IOException {
+        InputStream input = null;
+        OutputStream output = null;
+        try {
+            input = new FileInputStream(source);
+            output = new FileOutputStream(dest);
+            byte[] buf = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = input.read(buf)) > 0) {
+                output.write(buf, 0, bytesRead);
+            }
+        } finally {
+            input.close();
+            output.close();
+        }
     }
 }

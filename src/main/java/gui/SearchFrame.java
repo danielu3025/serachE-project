@@ -82,8 +82,8 @@ public class SearchFrame extends JFrame{
         adminBt.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Open Admin window");
                 //call admin program here
+                AdminFrame adminFrame = new AdminFrame();
             }
         });
 

@@ -34,12 +34,13 @@ public class AdminFrame extends JFrame {
         addDocs.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                AdminInsertFrame adminInsertFrame = new AdminInsertFrame();
             }
         });
         manageDocs.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                AdminManegeDocsFrame adminManegeDocsFrame = new AdminManegeDocsFrame();
 
             }
         });
